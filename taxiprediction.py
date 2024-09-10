@@ -1,5 +1,3 @@
-
-
 import streamlit as st
 import pandas as pd
 import numpy as np
@@ -172,3 +170,4 @@ if 'pin_code' in df.columns and 'pincode' in pincode_df.columns:
                 st.write(f"Predicted Fare from Pincode {from_pincode} to Pincode {to_pincode}: {fare:.2f} INR")
 else:
     st.write("One of the datasets is missing the required 'pin_code' or 'pincode' column.")
+
