@@ -6,6 +6,7 @@ from sklearn.preprocessing import StandardScaler
 from sklearn.model_selection import train_test_split, GridSearchCV
 from sklearn.metrics import mean_squared_error, mean_absolute_error, r2_score
 from datetime import datetime
+import pytz
 
 # Load dataset
 @st.cache_data
@@ -30,6 +31,8 @@ def train_model(X_train, y_train):
     grid_search.fit(X_train, y_train)
     
     return grid_search.best_estimator_
+
+india_timezone = pytz.timezone('Asia/Kolkata')
 
 # Function to predict fare
 def predict_fare(model, scaler, distance, duration, time_of_day, traffic_condition):
@@ -152,13 +155,13 @@ if 'pin_code' in df.columns and 'pincode' in pincode_df.columns:
         traffic_condition = st.radio(
             "Select Traffic Condition",
             ('Light Traffic', 'Moderate Traffic', 'Heavy Traffic'),
-            index=estimate_traffic_condition(map_time_of_day(datetime.now().hour))
+            index=estimate_traffic_condition(map_time_of_day(datetime.now(india_timezone).hour))
         )
 
         traffic_condition_mapping = {'Light Traffic': 0, 'Moderate Traffic': 1, 'Heavy Traffic': 2}
         traffic_condition = traffic_condition_mapping[traffic_condition]
 
-        st.write(f"Time of Day: {map_time_of_day(datetime.now().hour)}")
+        st.write(f"Time of Day: {map_time_of_day(datetime.now(india_timezone).hour)}")
         st.write(f"Selected Traffic Condition: {['Light', 'Moderate', 'Heavy'][traffic_condition]}")
 
         if distance > 0 and duration > 0:
@@ -166,7 +169,7 @@ if 'pin_code' in df.columns and 'pincode' in pincode_df.columns:
             st.write(f"Entered Duration: {duration:.2f} mins")
 
             if st.button('Predict Fare for Pincode to Pincode'):
-                fare = predict_fare(best_rf_model, scaler, distance, duration, time_mapping[map_time_of_day(datetime.now().hour)], traffic_condition)
+                fare = predict_fare(best_rf_model, scaler, distance, duration, time_mapping[map_time_of_day(datetime.now(india_timezone).hour)], traffic_condition)
                 st.write(f"Predicted Fare from Pincode {from_pincode} to Pincode {to_pincode}: {fare:.2f} INR")
 else:
     st.write("One of the datasets is missing the required 'pin_code' or 'pincode' column.")
