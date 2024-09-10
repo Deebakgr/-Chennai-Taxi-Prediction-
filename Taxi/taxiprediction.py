@@ -757,8 +757,8 @@ st.set_page_config(page_title="Chennai Taxi Fare Predictor", page_icon=favicon)
 
 
 # Load data
-df = load_data('./chennai_taxi_fares_with_pin_codes.xlsx')
-pincode_df = load_pincode_data('./chennai_pincode_lat_lon.csv')
+df = load_data('../Taxi/chennai_taxi_fares_with_pin_codes.xlsx')
+pincode_df = load_pincode_data('../Taxi/chennai_pincode_lat_lon.csv')
 
 # Check if 'pin_code' exists in both datasets
 if 'pin_code' in df.columns and 'pincode' in pincode_df.columns:
